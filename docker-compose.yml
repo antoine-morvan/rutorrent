@@ -1,0 +1,32 @@
+
+services:
+  rutorrent:
+    image: crazymax/rtorrent-rutorrent:latest
+    restart: always
+    environment:
+      - TZ=Europe/Paris
+      - PUID=1000
+      - PGID=1000
+      - RT_INC_PORT=54324
+    ports:
+      - "54324:54324"
+      - "8080:8080"
+    volumes:
+      - ${SERVER_DATA}/rutorrent_data:/data
+      - ${SERVER_CONFIG}/rtorrent.rc:/data/rtorrent/.rtorrent.rc
+      - ${SERVER_DATA}/rutorrent_downloads:/downloads
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000
+
+  httpshare:
+    image: httpd
+    restart: always
+    volumes:
+      - "${SERVER_DATA}/http_root:/usr/local/apache2/htdocs/:rw" # empty folder
+      - "${SERVER_CONFIG}/robots.txt:/usr/local/apache2/htdocs/robots.txt:ro"
+      - "${SERVER_DATA}/rutorrent_downloads:/usr/local/apache2/htdocs/rutorrent:ro"
+    ports:
+      - '80:80'
