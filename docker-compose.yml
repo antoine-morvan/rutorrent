@@ -1,5 +1,21 @@
 
 services:
+  haproxy:
+      restart: always
+      image: 'ghcr.io/tomdess/docker-haproxy-certbot:master'
+      environment:
+          - CERT1=www.your.domain.com
+          - CERT2=torrent.your.domain.com
+          - CERT3=plex.your.domain.com
+          - EMAIL=your.email@gmail.com
+          # - STAGING=false
+      volumes:
+          - ${SERVER_DATA}/letsencrypt:/etc/letsencrypt
+          - ${SERVER_CONFIG}/haproxy.cfg:/etc/haproxy/haproxy.cfg
+      ports:
+          - '80:80'
+          - '443:443'
+
   rutorrent:
     image: crazymax/rtorrent-rutorrent:latest
     restart: always
@@ -10,10 +26,10 @@ services:
       - RT_INC_PORT=54324
     ports:
       - "54324:54324"
-      - "8080:8080"
+      # - "8080:8080" # internal redirect with haproxy
     volumes:
-      - ${SERVER_DATA}/rutorrent_data:/data
       - ${SERVER_CONFIG}/rtorrent.rc:/data/rtorrent/.rtorrent.rc
+      - ${SERVER_DATA}/rutorrent_data:/data
       - ${SERVER_DATA}/rutorrent_downloads:/downloads
     ulimits:
       nproc: 65535
@@ -25,8 +41,32 @@ services:
     image: httpd
     restart: always
     volumes:
-      - "${SERVER_DATA}/http_root:/usr/local/apache2/htdocs/:rw" # empty folder
       - "${SERVER_CONFIG}/robots.txt:/usr/local/apache2/htdocs/robots.txt:ro"
-      - "${SERVER_DATA}/rutorrent_downloads:/usr/local/apache2/htdocs/rutorrent:ro"
-    ports:
-      - '80:80'
+      - "${SERVER_DATA}/http_root:/usr/local/apache2/htdocs/:rw" # empty folder
+      - "${SERVER_DATA}/rutorrent_downloads/complete:/usr/local/apache2/htdocs/rutorrent:ro"
+    # ports:
+    #   - '80:80' # internal redirect with haproxy
+
+  # plex:
+  #   image: lscr.io/linuxserver/plex:latest
+  #   restart: always
+  #   ports:
+  #     - 32400:32400 # internal redirect with haproxy
+  #     - 1900:1900/udp
+  #     - 5353:5353/udp
+  #     - 8324:8324
+  #     - 32410:32410/udp
+  #     - 32412:32412/udp
+  #     - 32413:32413/udp
+  #     - 32414:32414/udp
+  #     - 32469:32469
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/Paris
+  #     - VERSION=docker
+  #     # - PLEX_CLAIM=
+  #   volumes:
+  #     - ${SERVER_CONFIG}/plex_config:/config
+  #     - ${SERVER_DATA}/rutorrent_downloads/complete:/shares/rutorrent:ro
+  #     - ${SERVER_DATA}/plex_transcode/:/plex_transcode:rw
