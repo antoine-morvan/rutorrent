@@ -3,6 +3,7 @@ services:
   haproxy:
       restart: always
       image: 'ghcr.io/tomdess/docker-haproxy-certbot:master'
+      container_name: haproxy
       environment:
           - CERT1=www.your.domain.com
           - CERT2=torrent.your.domain.com
@@ -70,6 +71,7 @@ services:
 
   plex:
     image: lscr.io/linuxserver/plex:latest
+    container_name: plex
     restart: always
     ports:
       # - 32400:32400 # internal redirect with haproxy
