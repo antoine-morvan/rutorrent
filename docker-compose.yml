@@ -27,6 +27,10 @@ services:
       - PUID=1000
       - PGID=1000
       - RT_INC_PORT=54324
+      - RT_PREALLOCATE_TYPE=2
+      - MEMORY_LIMIT=512M # PHP limit
+      - RU_REMOVE_CORE_PLUGINS=ratio,ipad,feeds,rss,rssurlrewrite,rutracker_check,screenshots,spectogram,theme,autotools,extratio,unpack
+      - RU_CACHED_PLUGIN_LOADING=true
     ports:
       - "54324:54324"
       # - "8080:8080" # internal redirect with haproxy
@@ -34,6 +38,7 @@ services:
       - ${SERVER_CONFIG}/rtorrent.rc:/data/rtorrent/.rtorrent.rc
       - ${SERVER_DATA}/rutorrent_data:/data
       - ${SERVER_DATA}/rutorrent_downloads:/downloads
+    stop_grace_period: 60s
     ulimits:
       nproc: 65535
       nofile:

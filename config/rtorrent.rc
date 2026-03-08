@@ -3,18 +3,18 @@
 throttle.global_down.max_rate.set_kb = 0
 throttle.global_up.max_rate.set_kb = 0
 
-throttle.max_uploads.set = 100
-throttle.max_uploads.global.set = 250
+throttle.max_downloads.global.set = 20
+throttle.max_uploads.global.set   = 40
 
-throttle.min_peers.normal.set = 20
-throttle.max_peers.normal.set = 60
-throttle.min_peers.seed.set = 30
-throttle.max_peers.seed.set = 80
+throttle.min_peers.normal.set = 10
+throttle.max_peers.normal.set = 20
+throttle.min_peers.seed.set   = 5
+throttle.max_peers.seed.set   = 15
 trackers.numwant.set = 80
 
 network.http.max_open.set = 50
-network.max_open_files.set = 600
-network.max_open_sockets.set = 300
+network.max_open_sockets.set = 150
+network.max_open_files.set   = 150
 
 # Enable DHT support for trackerless torrents or when all trackers are down
 # May be set to "disable" (completely disable DHT), "off" (do not start DHT),
@@ -36,7 +36,7 @@ trackers.use_udp.set = no
 # physical memory allocation. Default: 1GB (max_memory_usage)
 # This may also be set using ulimit -m where 3/4 will be allocated to file chunks
 pieces.memory.max.set = 2800M
-network.xmlrpc.size_limit.set = 4M
+network.xmlrpc.size_limit.set = 1M
 
 # Alternative calls to bind and ip that should handle dynamic ip's
 #schedule2 = ip_tick,0,1800,ip=rakshasa
@@ -53,6 +53,7 @@ system.umask.set = 0022
 # Add a preferred filename encoding to the list
 encoding.add = UTF-8
 
+schedule2 = session_save, 1200, 43200, ((session.save))
 # Watch a directory for new torrents, and stop those that have been deleted
 directory.watch.added = (cat,(cfg.watch)), load.start
 schedule2 = untied_directory, 5, 5, (cat,"stop_untied=",(cfg.watch),"*.torrent")
