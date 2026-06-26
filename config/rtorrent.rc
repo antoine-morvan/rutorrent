@@ -13,7 +13,7 @@ throttle.max_peers.seed.set   = 15
 trackers.numwant.set = 80
 
 network.http.max_open.set = 50
-network.max_open_sockets.set = 150
+network.max_open_sockets.set = 512
 network.max_open_files.set   = 150
 
 # Enable DHT support for trackerless torrents or when all trackers are down
