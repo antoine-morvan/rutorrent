@@ -12,7 +12,7 @@ throttle.min_peers.seed.set   = 5
 throttle.max_peers.seed.set   = 15
 trackers.numwant.set = 80
 
-network.http.max_open.set = 50
+# network.http.max_open.set = 50 # removed with rtorrent 0.16.14
 network.max_open_sockets.set = 512
 network.max_open_files.set   = 150
 
@@ -51,15 +51,18 @@ network.port_random.set = no
 system.umask.set = 0022
 
 # Add a preferred filename encoding to the list
-encoding.add = UTF-8
+# encoding.add = UTF-8 # removed with rtorrent 0.16.14
 
-schedule2 = session_save, 1200, 43200, ((session.save))
+# schedule2 = session_save, 1200, 43200, ((session.save)) # removed with rtorrent 0.16.14
+schedule = session_save, 1200, 43200, ((session.save))
 # Watch a directory for new torrents, and stop those that have been deleted
 directory.watch.added = (cat,(cfg.watch)), load.start
-schedule2 = untied_directory, 5, 5, (cat,"stop_untied=",(cfg.watch),"*.torrent")
+# schedule2 = untied_directory, 5, 5, (cat,"stop_untied=",(cfg.watch),"*.torrent") # removed with rtorrent 0.16.14
+schedule = untied_directory, 5, 5, (cat,"stop_untied=",(cfg.watch),"*.torrent")
 
 # Close torrents when diskspace is low
-schedule2 = monitor_diskspace, 15, 60, ((close_low_diskspace,1000M))
+# schedule2 = monitor_diskspace, 15, 60, ((close_low_diskspace,1000M)) # removed with rtorrent 0.16.14
+schedule = monitor_diskspace, 15, 60, ((close_low_diskspace,1000M))
 
 # Move finished (no need Autotools/Automove plugin on ruTorrent)
 method.insert = d.get_finished_dir, simple, "cat=$cfg.download_complete=,$d.custom1="
