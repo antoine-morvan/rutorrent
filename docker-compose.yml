@@ -20,8 +20,8 @@ services:
 
   rutorrent:
     # some trackers refuse latest releases ...
-    image: crazymax/rtorrent-rutorrent:5.3.7-0.16.17
-    # image: crazymax/rtorrent-rutorrent:latest
+    # image: crazymax/rtorrent-rutorrent:5.3.7-0.16.17
+    image: crazymax/rtorrent-rutorrent:latest
     container_name: rutorrent
     restart: always
     environment:
@@ -66,7 +66,8 @@ services:
       - 7359:7359/udp
     volumes:
       - ${SERVER_DATA}/jellyfin_config:/config
-      - ${SERVER_DATA}/jellyfin_cache:/cache
+      # - ${SERVER_DATA}/jellyfin_cache:/cache
+      - /dev/shm/jellyfin_cache:/cache
       - ${SERVER_DATA}/rutorrent_downloads/complete:/media:ro
     restart: 'unless-stopped'
     # Optional - alternative address used for autodiscovery
